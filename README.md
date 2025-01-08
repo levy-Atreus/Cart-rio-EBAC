@@ -1,7 +1,3 @@
-# Cart-rio-EBAC
-Projeto do curso de TI da EBAC
-
-
 #include <stdio.h> // biblioteca de comunicação com usuário
 #include <stdlib.h> // biblioteca de alocação de espaço de memória
 #include <locale.h> // biblioteca de alocações de texto por região
@@ -126,95 +122,123 @@ int sair()
     getchar();
 }
 
-
-//mudança 
-
 void listarUsuarios() 
 {
+    // Declara um ponteiro para uma estrutura dirent, que contém informações sobre uma entrada de diretório.
     struct dirent *entrada;
-    DIR *diretorio = opendir("."); // Abre o diretório atual
+    // Abre o diretório atual ('.'). Retorna um ponteiro para a estrutura DIR se bem-sucedido, NULL caso contrário.
+    DIR *diretorio = opendir(".");
 
+    // Verifica se houve erro ao abrir o diretório.
     if (diretorio == NULL) 
     {
         printf("Erro ao abrir o diretório!");
         return;
     }
     printf("Lista de usuários:");
+    // Loop que itera sobre todas as entradas do diretório.
     while ((entrada = readdir(diretorio)) != NULL) 
     {
-        // Ignora as entradas '.' e '..'
+        // Ignora as entradas '.' (diretório atual) e '..' (diretório pai).
         if (entrada->d_name[0] != '.') 
         {
+            // Tenta abrir o arquivo correspondente à entrada do diretório no modo leitura.
             FILE *file = fopen(entrada->d_name, "r");
+            // Verifica se o arquivo foi aberto com sucesso.
             if (file != NULL) 
             {
+                // Declara um array de caracteres para armazenar o conteúdo do arquivo.
                 char conteudo[200];
+                // Imprime o nome do usuário.
                 printf("Informações do usuário %s:", entrada->d_name);
+                // Loop que lê o conteúdo do arquivo linha por linha.
                 while (fgets(conteudo, sizeof(conteudo), file) != NULL) 
                 {
+                    // Imprime o conteúdo lido.
                     printf("%s", conteudo);
                 }
+                // Fecha o arquivo.
                 fclose(file);
                 printf("");
             }
         }
     }
-    closedir(diretorio); // Fecha o diretório
+    // Fecha o diretório.
+    closedir(diretorio);
 }
-    
-//mudança 
-
 
 int main() 
 {
     int opcao = 0; // variáveis
-    int laco = 1;
+    char senhadigitada[10];
 
-    for (laco = 1; laco == 1;) 
+    while (1) // loop infinito
     {
-        system("clear"); // Limpa a tela no Linux
-        setlocale(LC_ALL, "portuguese"); // Definindo a linguagem
+        printf("Digite a sua senha: ");
+        scanf("%s", senhadigitada);
 
-        printf("\t###  Cartório da EBAC  ###\n\n"); // menu do usuário
-        printf("\tMenu de usuários\n\n");
-        printf("Escolha uma opção:\n\n");
-        printf("\t1 - Registrar nomes\n");
-        printf("\t2 - Consultar nomes\n");
-        printf("\t3 - Deletar nomes\n\n");
-        printf("\t4 - Sair do sistema\n\n");
-        printf("\t5 - listar todos os usuários\n\n");
-        printf("Opção: "); // fim do menu
-
-        scanf("%d", &opcao); // armazenando a escolha do usuário
-
-        system("clear");
-        
-        switch(opcao) 
+        if (strcmp(senhadigitada, "a") == 0)
         {
-            case 1:
-                registro();
-                break;
-            case 2:
-                consulta();
-                break;
-            case 3:
-                deletar();
-                break;
-            case 4:
-                printf("obrigado por usar o sistema volte sempre\n");
-                sair();
-                return 0;
-                break;
-            case 5:
-                printf("lista de usuários\n");
-                listarUsuarios();
-            default:
-                printf("Essa opção não está disponível!\n\n");
-                printf("Pressione Enter para continuar...");
-                getchar();
-                getchar(); // fim da seleção
-                break;
+            // A senha está correta
+            system("clear");
+            printf("\t###  Cartório da EBAC  ###");
+            printf("Login de administrador!");
+            break; // sai do loop se a senha estiver correta
+        } 
+        else 
+        {
+            printf("Senha incorreta! Tente novamente.");
         }
+    }
 
+
+    {
+        {
+            system("clear"); // Limpa a tela no Linux
+            setlocale(LC_ALL, "portuguese"); // Definindo a linguagem
+
+            printf("\t###  Cartório da EBAC  ###\n\n"); // menu do usuário
+            printf("\tMenu de usuários\n\n");
+            printf("Escolha uma opção:\n\n");
+            printf("\t1 - Registrar nomes\n");
+            printf("\t2 - Consultar nomes\n");
+            printf("\t3 - Deletar nomes\n\n");
+            printf("\t4 - listar todos os usuários\n\n");
+            printf("\t5 - Sair do sistema\n\n");
+            printf("Opção: "); // fim do menu
+
+            scanf("%d", &opcao); // armazenando a escolha do usuário
+
+            system("clear");
+        
+            switch(opcao) 
+            {
+                case 1:
+                    registro();
+                    break;
+                case 2:
+                    consulta();
+                    break;
+                case 3:
+                    deletar();
+                    break;
+                case 4:
+                    printf("lista de usuários\n");
+                    listarUsuarios();
+                    break;
+                case 5:
+                    printf("obrigado por usar o sistema volte sempre\n");
+                    sair();
+                    return 0;
+                    default:
+                    printf("Essa opção não está disponível!\n\n");
+                    printf("Pressione Enter para continuar...");
+                    getchar();
+                    getchar(); // fim da seleção
+                    break;
+            }
+        }   
     }
 }   
+
+
