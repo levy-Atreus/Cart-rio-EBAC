@@ -4,7 +4,7 @@
 #include <string.h> // biblioteca responsável por cuidar das strings
 #include <dirent.h> // biblioteca para manipulação de diretórios
 
-int registro() 
+int registro() //registra novos usuários
 {
     char arquivo[40];
     char cpf[40];
@@ -59,14 +59,14 @@ int registro()
     return 0;
 }
 
-//início da consultant consulta()
+//início da consultant consulta
 int consulta()
 {
     char cpf[40]; //Adicione o ponto e vírgula
     char conteudo[200]; //Adicione o ponto e vírgula
 
     printf("Digite o CPF a ser consultado: ");
-    scanf("%s", cpf);
+    scanf("%s39s", cpf);
 
     FILE *file = fopen(cpf, "r"); //Abra o arquivo para leitura
 
@@ -83,11 +83,9 @@ int consulta()
     }
 
     fclose(file); //Não esqueça de fechar o arquivo
-    getchar(); //Aguarde o usuário pressionar Enter
-    getchar();
-    return 0;
 }
 //fim da consulta
+
 
 int deletar() 
 {
@@ -95,24 +93,23 @@ int deletar()
     printf("Digite o CPF a ser deletado: ");
     scanf("%s", cpf);
 
-    remove(cpf);
+    FILE *file = fopen(cpf, "r"); //Verifica se o arquivo existe primeiro
 
-    FILE *file;
-    file = fopen(cpf, "r");
-
-    if (file == NULL) 
+    if (file != NULL) // Se o arquivo existir
     {
-        printf("Usuário deletado com sucesso!\n");
+        fclose(file); // Fecha o arquivo
+        remove(cpf); // Remove o arquivo
+        printf("Usuário deletado com sucesso!");
     }
-     else 
+    else 
     {
-        printf("Usuário não se encontra no sistema!\n");
-        getchar();
-        getchar();
+        printf("Usuário não se encontra no sistema!");
     }
+    getchar();
     getchar();
     return 0;
 }
+
 
 int sair() 
 {
@@ -135,7 +132,6 @@ void listarUsuarios()
         printf("Erro ao abrir o diretório!");
         return;
     }
-    printf("Lista de usuários:");
     // Loop que itera sobre todas as entradas do diretório.
     while ((entrada = readdir(diretorio)) != NULL) 
     {
@@ -159,13 +155,13 @@ void listarUsuarios()
                 }
                 // Fecha o arquivo.
                 fclose(file);
-                printf("");
             }
         }
     }
     // Fecha o diretório.
     closedir(diretorio);
 }
+
 
 int main() 
 {
@@ -177,12 +173,12 @@ int main()
         printf("Digite a sua senha: ");
         scanf("%s", senhadigitada);
 
-        if (strcmp(senhadigitada, "a") == 0)
+        if (strcmp(senhadigitada, "admin") == 0)
         {
             // A senha está correta
             system("clear");
-            printf("\t###  Cartório da EBAC  ###");
-            printf("Login de administrador!");
+            printf("\t###  Cartório da EBAC  ###\n\n");
+            
             break; // sai do loop se a senha estiver correta
         } 
         else 
@@ -193,10 +189,12 @@ int main()
 
 
     {
+        while (2)
         {
             system("clear"); // Limpa a tela no Linux
             setlocale(LC_ALL, "portuguese"); // Definindo a linguagem
 
+            printf("Login de administrador!\n\n");
             printf("\t###  Cartório da EBAC  ###\n\n"); // menu do usuário
             printf("\tMenu de usuários\n\n");
             printf("Escolha uma opção:\n\n");
@@ -225,11 +223,12 @@ int main()
                 case 4:
                     printf("lista de usuários\n");
                     listarUsuarios();
+                    getchar();
+                    getchar();
                     break;
                 case 5:
                     printf("obrigado por usar o sistema volte sempre\n");
                     sair();
-                    return 0;
                     default:
                     printf("Essa opção não está disponível!\n\n");
                     printf("Pressione Enter para continuar...");
@@ -239,6 +238,8 @@ int main()
             }
         }   
     }
+    while(opcao !=5); //continua até opção 5 ser escolhida.
 }   
 
 
+    
